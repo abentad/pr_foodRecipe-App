@@ -1,6 +1,6 @@
 import 'package:aserar/constants.dart';
 import 'package:aserar/controller/api_controller.dart';
-import 'package:aserar/view/home.dart';
+import 'package:aserar/view/home/homes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -18,14 +18,14 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Aserar',
       theme: ThemeData(
         primarySwatch: Colors.teal,
         scaffoldBackgroundColor: Colors.white,
       ),
-      home: Home(),
+      home: Homes(),
     );
   }
 }

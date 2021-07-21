@@ -29,6 +29,7 @@ class ApiController extends GetxController {
     var response = await http.get(Uri.parse(foodGettingUrl));
     var decodedData = jsonDecode(response.body)['results'];
     decodedData.forEach((food) => _foodsList.add(Food.fromJson(food)));
+    print("Found list of foods");
     update();
   }
 }

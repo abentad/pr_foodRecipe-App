@@ -1,6 +1,9 @@
 import 'dart:convert';
 
 import 'package:aserar/model/food.dart';
+import 'package:aserar/view/home/homes.dart';
+import 'package:aserar/view/noInternet.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
@@ -24,12 +27,44 @@ class ApiController extends GetxController {
     super.onInit();
   }
 
+  Future<bool> checkConnection() async {
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.mobile) {
+      print("I am connected to a mobile network.");
+      return true;
+    } else if (connectivityResult == ConnectivityResult.wifi) {
+      print("I am connected to a wifi network.");
+      return true;
+    } else if (connectivityResult == ConnectivityResult.none) {
+      //not connected to internet
+      Get.offAll(() => NoInternet(), transition: Transition.fadeIn);
+      return false;
+    } else {
+      return false;
+    }
+  }
+
   //
   void getAllFoods() async {
-    var response = await http.get(Uri.parse(foodGettingUrl));
-    var decodedData = jsonDecode(response.body)['results'];
-    decodedData.forEach((food) => _foodsList.add(Food.fromJson(food)));
-    print("Found list of foods");
-    update();
+    bool hasInternet = await checkConnection();
+    if (hasInternet) {
+      var response = await http.get(Uri.parse(foodGettingUrl));
+      var decodedData = jsonDecode(response.body)['results'];
+      decodedData.forEach((food) => _foodsList.add(Food.fromJson(food)));
+      print("Found list of foods");
+      update();
+    } else {}
+  }
+
+  void retry() async {
+    bool hasInternet = await checkConnection();
+    if (hasInternet) {
+      Get.offAll(() => Homes(), transition: Transition.fadeIn);
+      var response = await http.get(Uri.parse(foodGettingUrl));
+      var decodedData = jsonDecode(response.body)['results'];
+      decodedData.forEach((food) => _foodsList.add(Food.fromJson(food)));
+      print("Found list of foods");
+      update();
+    } else {}
   }
 }

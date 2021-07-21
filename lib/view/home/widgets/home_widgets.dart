@@ -1,4 +1,6 @@
 import 'package:aserar/controller/api_controller.dart';
+import 'package:aserar/view/settings/settings.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
@@ -18,16 +20,29 @@ class HomeWidgets {
             children: [
               Hero(
                 tag: controller.foodsList[index].foodId,
-                child: Container(
-                  height: size.height * 0.3,
-                  width: size.width,
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    borderRadius: BorderRadius.circular(10.0),
-                    image: DecorationImage(image: NetworkImage(controller.foodsList[index].foodImage), fit: BoxFit.fill),
+                child: CachedNetworkImage(
+                  imageUrl: controller.foodsList[index].foodImage,
+                  imageBuilder: (context, imageProvider) => Container(
+                    height: size.height * 0.3,
+                    width: size.width,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10.0),
+                      color: Colors.grey[200],
+                      image: DecorationImage(
+                        image: imageProvider,
+                        fit: BoxFit.fill,
+                        // colorFilter: ColorFilter.mode(Colors.grey, BlendMode.colorBurn),
+                      ),
+                    ),
                   ),
-                  child: Column(
-                    children: [],
+                  placeholder: (context, url) => Container(
+                    height: size.height * 0.3,
+                    width: size.width,
+                  ),
+                  errorWidget: (context, url, error) => Container(
+                    height: size.height * 0.4,
+                    width: size.width,
+                    child: Center(child: Icon(Icons.error)),
                   ),
                 ),
               ),
@@ -97,10 +112,13 @@ class HomeWidgets {
       actions: [
         FloatingSearchBarAction(
           showIfOpened: false,
-          child: CircleAvatar(
-            backgroundColor: Colors.teal[200],
-            radius: 20.0,
-            child: Text("AB", style: TextStyle(color: Colors.white)),
+          child: GestureDetector(
+            onTap: () => Get.to(() => Settings()),
+            child: CircleAvatar(
+              backgroundColor: Colors.teal[200],
+              radius: 20.0,
+              child: Text("AB", style: TextStyle(color: Colors.white)),
+            ),
           ),
         ),
         FloatingSearchBarAction.searchToClear(

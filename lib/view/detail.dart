@@ -1,4 +1,5 @@
 import 'package:aserar/controller/api_controller.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -18,13 +19,28 @@ class Detail extends StatelessWidget {
           children: [
             Hero(
               tag: _apiController.foodsList[selectedFood].foodId,
-              child: ClipRRect(
-                borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20.0), bottomRight: Radius.circular(20.0)),
-                child: Container(
-                  height: size.height * 0.372,
+              child: CachedNetworkImage(
+                imageUrl: _apiController.foodsList[selectedFood].foodImage,
+                imageBuilder: (context, imageProvider) => Container(
+                  height: size.height * 0.4,
                   decoration: BoxDecoration(
-                    image: DecorationImage(image: NetworkImage(_apiController.foodsList[selectedFood].foodImage), fit: BoxFit.contain),
+                    borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20.0), bottomRight: Radius.circular(20.0)),
+                    color: Colors.grey[200],
+                    image: DecorationImage(
+                      image: imageProvider,
+                      fit: BoxFit.fill,
+                      // colorFilter: ColorFilter.mode(Colors.grey, BlendMode.colorBurn),
+                    ),
                   ),
+                ),
+                placeholder: (context, url) => Container(
+                  height: size.height * 0.4,
+                  width: size.width,
+                ),
+                errorWidget: (context, url, error) => Container(
+                  height: size.height * 0.4,
+                  width: size.width,
+                  child: Center(child: Icon(Icons.error)),
                 ),
               ),
             ),

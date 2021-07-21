@@ -2,19 +2,15 @@ import 'package:aserar/controller/api_controller.dart';
 import 'package:aserar/view/home/widgets/home_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class Homes extends StatelessWidget {
-  final ApiController _apiController = Get.find<ApiController>();
-
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
     return GetBuilder<ApiController>(
       builder: (controller) => Scaffold(
-        backgroundColor: Color(0xffFAFCFE),
-        body: _apiController.foodsList.isEmpty
+        body: controller.foodsList.isEmpty
             ? Center(child: CircularProgressIndicator())
             : SafeArea(
                 child: CustomScrollView(
@@ -39,7 +35,10 @@ class Homes extends StatelessWidget {
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                                  child: Text('Find Best Ethiopian \nFood Recipes', style: GoogleFonts.montserrat(fontSize: 24.0, fontWeight: FontWeight.bold)),
+                                  child: Text(
+                                    'Find Best Ethiopian \nFood Recipes',
+                                    style: Theme.of(context).textTheme.bodyText2?.copyWith(fontSize: 24.0, fontWeight: FontWeight.bold),
+                                  ),
                                 ),
                               ],
                             ),

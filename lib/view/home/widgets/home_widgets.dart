@@ -13,7 +13,10 @@ class HomeWidgets {
       padding: index == 0 ? const EdgeInsets.only(left: 20.0, right: 20.0, top: 20.0, bottom: 10.0) : const EdgeInsets.only(left: 20.0, right: 20.0, top: 0.0, bottom: 10.0),
       child: InkWell(
         borderRadius: BorderRadius.circular(10.0),
-        onTap: () => Get.to(() => Detail(index), transition: Transition.fadeIn, duration: Duration(milliseconds: 400)),
+        onTap: () {
+          controller.getFoodIngredients(foodId: controller.foodsList[index].foodId.toString());
+          Get.to(() => Detail(index), transition: Transition.fadeIn, duration: Duration(milliseconds: 400));
+        },
         child: Container(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -54,7 +57,7 @@ class HomeWidgets {
                     SizedBox(height: size.height * 0.01),
                     Text(controller.foodsList[index].foodName, style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16.0)),
                     SizedBox(height: size.height * 0.01),
-                    Text('Easy, quick and yet so delicious', style: TextStyle(color: Colors.grey)),
+                    Text(controller.foodsList[index].foodDescription, style: TextStyle(color: Colors.grey)),
                     SizedBox(height: size.height * 0.01),
                     Row(
                       children: [

@@ -1,4 +1,5 @@
 import 'package:aserar/controller/api_controller.dart';
+import 'package:aserar/view/steps.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -26,12 +27,10 @@ class Detail extends StatelessWidget {
                 imageBuilder: (context, imageProvider) => Container(
                   height: size.height * 0.4,
                   decoration: BoxDecoration(
-                    // borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20.0), bottomRight: Radius.circular(20.0)),
                     color: Colors.grey[200],
                     image: DecorationImage(
                       image: imageProvider,
                       fit: BoxFit.fill,
-                      // colorFilter: ColorFilter.mode(Colors.grey, BlendMode.colorBurn),
                     ),
                   ),
                 ),
@@ -48,17 +47,17 @@ class Detail extends StatelessWidget {
             ),
             SizedBox(height: size.height * 0.02),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              padding: const EdgeInsets.symmetric(horizontal: 30.0),
               child: Text(_apiController.foodsList[selectedFood].foodNameAm, style: TextStyle(color: Colors.black, fontSize: 26.0, fontWeight: FontWeight.bold)),
             ),
             SizedBox(height: size.height * 0.02),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              padding: const EdgeInsets.symmetric(horizontal: 30.0),
               child: Text(_apiController.foodsList[selectedFood].foodDescriptionAm, style: TextStyle(color: Colors.black, fontSize: 22.0)),
             ),
             SizedBox(height: size.height * 0.05),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              padding: const EdgeInsets.symmetric(horizontal: 30.0),
               child: Text("Ingredients", style: TextStyle(color: Colors.grey, fontSize: 22.0, fontWeight: FontWeight.bold)),
             ),
             GetBuilder<ApiController>(
@@ -66,7 +65,7 @@ class Detail extends StatelessWidget {
                 child: ListView.builder(
                   itemCount: controller.ingredientList.length,
                   itemBuilder: (context, index) => Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 30.0),
                     child: Text("->  " + controller.ingredientList[index].ingredientNameAm, style: TextStyle(color: Colors.black, fontSize: 18.0)),
                   ),
                 ),
@@ -75,7 +74,10 @@ class Detail extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: MaterialButton(
-                onPressed: () {},
+                onPressed: () {
+                  _apiController.getStepsByFoodId(foodId: _apiController.foodsList[selectedFood].foodId.toString());
+                  Get.to(() => Steps(selectedFood));
+                },
                 height: 60.0,
                 minWidth: double.infinity,
                 color: Colors.black,

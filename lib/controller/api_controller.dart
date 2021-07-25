@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:aserar/model/food.dart';
 import 'package:aserar/model/ingredient.dart';
+import 'package:aserar/model/step.dart';
 import 'package:aserar/view/home/homes.dart';
 import 'package:aserar/view/noInternet.dart';
 import 'package:connectivity/connectivity.dart';
@@ -15,7 +16,7 @@ class ApiController extends GetxController {
   String foodRemovingUrl = "https://aserar.rentoch.com/food/remove/11";
   String foodGettingByIdUrl = "https://aserar.rentoch.com/food/byid/12";
 
-  String stepsGettingByFoodIdUrl = "https://aserar.rentoch.com/food/steps/1";
+  String stepsGettingByFoodIdUrl = "https://aserar.rentoch.com/food/steps/";
   String stepsPostingUrl = "https://aserar.rentoch.com/food/steps/add";
 
   String ingredientGettingByIdUrl = "https://aserar.rentoch.com/food/ingredients/";
@@ -25,6 +26,9 @@ class ApiController extends GetxController {
 
   List<Food> get foodsList => _foodsList;
   List<Ingredient> get ingredientList => _ingredientsList;
+
+  List<Step> _stepsList = [];
+  List<Step> get stepsList => _stepsList;
 
   @override
   void onInit() {
@@ -81,6 +85,18 @@ class ApiController extends GetxController {
       _ingredientsList.clear();
       decodedData.forEach((ingredient) => _ingredientsList.add(Ingredient.fromJson(ingredient)));
       print("got ${_ingredientsList.length} ingredients");
+      update();
+    } else {}
+  }
+
+  void getStepsByFoodId({required String foodId}) async {
+    bool hasInternet = await checkConnection();
+    if (hasInternet) {
+      var response = await http.get(Uri.parse(stepsGettingByFoodIdUrl + foodId));
+      var decodedData = jsonDecode(response.body)['results'];
+      _stepsList.clear();
+      decodedData.forEach((step) => _stepsList.add(Step.fromJson(step)));
+      print("got ${_stepsList.length} steps");
       update();
     } else {}
   }
